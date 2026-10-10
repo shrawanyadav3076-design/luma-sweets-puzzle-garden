@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#130924">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Luma Sweets: Puzzle Garden - A magical match-3 adventure with glowing cascades, special candies, and exciting garden levels.">
+  <title>Luma Sweets: Puzzle Garden</title>
+
+  <!-- PWA Manifest & Icons -->
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="assets/images/icon-192.png">
+  <link rel="icon" type="image/png" href="assets/images/icon-192.png">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/animations.css">
+</head>
+<body>
+  <div id="app-container">
+
+    <!-- GLOBAL TOP STATS BAR -->
+    <header class="top-stats-bar">
+      <div class="stat-pill">
+        <span class="stat-icon">🪙</span>
+        <span class="stat-coins-value">300</span>
+      </div>
+      <div class="stat-pill">
+        <span class="stat-icon">⭐</span>
+        <span class="stat-stars-value">0</span>
+      </div>
+    </header>
+
+    <!-- ==================== SCREEN: HOME ==================== -->
+    <main id="screen-home" class="screen active">
+      <div class="home-hero">
+        <img src="assets/images/mascot.jpg" alt="Luma Sweets Mascot" class="home-mascot">
+        <h1 class="home-title">Luma Sweets</h1>
+        <div class="home-subtitle">Puzzle Garden</div>
+      </div>
+
+      <div class="home-nav-card">
+        <button id="btn-home-play" class="btn-primary-play">PLAY</button>
+        <button id="btn-home-newgame" class="btn-secondary" style="background: var(--btn-gold-grad); color: #3D2500; font-weight: 800;">
+          <span>🔄</span> NEW GAME
+        </button>
+
+        <div class="home-row-buttons">
+          <button id="btn-home-map" class="btn-secondary">
+            <span>🗺️</span> Level Map
+          </button>
+          <button id="btn-home-daily" class="btn-secondary">
+            <span>⚡</span> Daily Challenge
+          </button>
+        </div>
+
+        <button id="btn-home-rewards" class="btn-secondary" style="position: relative;">
+          <span>🎁</span> Daily Rewards
+          <span id="home-gift-badge" class="gift-indicator-dot" style="display: none;"></span>
+        </button>
+
+        <div class="home-bottom-icons">
+          <button id="btn-home-settings" class="icon-btn" title="Settings" aria-label="Settings">⚙️</button>
+          <button id="btn-home-howtoplay" class="icon-btn" title="How to Play" aria-label="How to Play">❓</button>
+          <button id="btn-home-about" class="icon-btn" title="About" aria-label="About">ℹ️</button>
+          <button id="btn-home-privacy" class="icon-btn" title="Privacy Policy" aria-label="Privacy Policy">🛡️</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- ==================== SCREEN: LEVEL MAP ==================== -->
+    <div id="screen-map" class="screen">
+      <div class="map-header">
+        <button id="btn-map-back" class="icon-btn" aria-label="Back to Home">‹</button>
+        <h2>Garden Pathway</h2>
+        <div style="width: 40px;"></div>
+      </div>
+
+      <div id="level-map-container" class="map-scroll-container">
+        <!-- Rendered dynamically by level-map.js -->
+      </div>
+    </div>
+
+    <!-- ==================== SCREEN: GAME ==================== -->
+    <div id="screen-game" class="screen">
+      <!-- Game HUD Top -->
+      <div class="game-hud-top">
+        <div class="hud-row-1">
+          <button id="btn-game-pause" class="icon-btn" aria-label="Pause">⏸</button>
+
+          <div class="hud-score-card">
+            <div id="hud-level-title" style="font-size: 13px; font-weight: 800; color: #FFA2BE;">Level 1</div>
+            <div style="font-size: 16px; font-weight: 900;"><span id="hud-score-value">0</span></div>
+            <div class="score-bar-container">
+              <div id="hud-progress-fill" class="score-bar-fill"></div>
+            </div>
+            <div class="hud-stars-overlay">
+              <span id="hud-star-1" class="hud-star">★</span>
+              <span id="hud-star-2" class="hud-star">★</span>
+              <span id="hud-star-3" class="hud-star">★</span>
+            </div>
+          </div>
+
+          <div class="hud-moves-card">
+            <div class="moves-label">Moves</div>
+            <div id="hud-moves-value" class="moves-value">20</div>
+          </div>
+        </div>
+
+        <!-- Objectives Tracker -->
+        <div id="hud-objectives" class="hud-objectives-row">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+
+      <!-- Puzzle Board Arena -->
+      <div class="board-arena-wrapper">
+        <div id="game-board" class="game-board">
+          <!-- Dynamically populated 8x8 grid -->
+        </div>
+      </div>
+
+      <!-- In-Game Boosters Bar -->
+      <div class="game-boosters-bar">
+        <button id="booster-btn-hammer" class="booster-btn" data-booster="hammer">
+          <span class="booster-icon">🔨</span>
+          <span class="booster-name">Hammer</span>
+          <span id="booster-count-hammer" class="booster-badge">3</span>
+        </button>
+        <button id="booster-btn-shuffle" class="booster-btn" data-booster="shuffle">
+          <span class="booster-icon">🔀</span>
+          <span class="booster-name">Shuffle</span>
+          <span id="booster-count-shuffle" class="booster-badge">3</span>
+        </button>
+        <button id="booster-btn-rainbow" class="booster-btn" data-booster="rainbow">
+          <span class="booster-icon">🌟</span>
+          <span class="booster-name">Rainbow</span>
+          <span id="booster-count-rainbow" class="booster-badge">2</span>
+        </button>
+        <button id="booster-btn-moves" class="booster-btn" data-booster="moves">
+          <span class="booster-icon">➕</span>
+          <span class="booster-name">+5 Moves</span>
+          <span id="booster-count-moves" class="booster-badge">2</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== MODALS ==================== -->
+
+    <!-- Level Preview Modal -->
+    <div id="modal-level-preview" class="modal">
+      <div class="modal-dialog">
+        <button class="modal-close-btn" aria-label="Close">✕</button>
+        <div id="preview-level-badge" class="modal-header-badge">Level 1</div>
+        <h2 id="preview-level-title" class="modal-title">Sweet Garden</h2>
+        <p id="preview-level-desc" class="modal-body" style="text-align: center;">Match candies to reach target score!</p>
+
+        <div style="display: flex; justify-content: space-around; margin: 12px 0 20px;">
+          <div class="stat-pill"><span id="preview-moves-value">20 Moves</span></div>
+          <div class="stat-pill"><span id="preview-score-value">Target: 1,500</span></div>
+        </div>
+
+        <div class="victory-stars-box" style="margin: 0 0 16px;">
+          <span id="preview-star-1" class="victory-star">★</span>
+          <span id="preview-star-2" class="victory-star">★</span>
+          <span id="preview-star-3" class="victory-star">★</span>
+        </div>
+        <div id="preview-best-score" style="font-size: 13px; color: #FFA2BE; margin-bottom: 20px;">Best: 0</div>
+
+        <button id="btn-preview-play" class="btn-primary-play">START LEVEL</button>
+      </div>
+    </div>
+
+    <!-- Victory Modal -->
+    <div id="modal-victory" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-header-badge">VICTORY!</div>
+        <h2 class="modal-title" style="color: var(--accent-gold);">Level Complete!</h2>
+
+        <div class="victory-stars-box">
+          <span id="victory-star-1" class="victory-star">★</span>
+          <span id="victory-star-2" class="victory-star">★</span>
+          <span id="victory-star-3" class="victory-star">★</span>
+        </div>
+
+        <div style="font-size: 16px; margin-bottom: 20px;">
+          Score: <strong id="victory-score-value" style="font-size: 22px; color: #FFF;">0</strong>
+        </div>
+
+        <div class="modal-actions">
+          <button id="btn-victory-next" class="btn-primary-play">NEXT LEVEL</button>
+          <button id="btn-victory-replay" class="btn-secondary">REPLAY</button>
+          <button id="btn-victory-map" class="btn-secondary" style="background: rgba(255,255,255,0.15);">GARDEN MAP</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Defeat Modal -->
+    <div id="modal-defeat" class="modal">
+      <div class="modal-dialog">
+        <div class="modal-header-badge" style="background: #A8003A; color: #FFF;">OUT OF MOVES</div>
+        <h2 class="modal-title">Almost Had It!</h2>
+        <p class="modal-body" style="text-align: center;">Don't give up! Add +5 extra moves to keep playing, or try again.</p>
+
+        <div style="font-size: 15px; margin-bottom: 18px;">
+          Final Score: <strong id="defeat-score-value" style="color: var(--accent-gold);">0</strong>
+        </div>
+
+        <div class="modal-actions">
+          <button id="btn-defeat-buymoves" class="btn-primary-play" style="background: var(--btn-gold-grad); color: #3D2500;">
+            +5 MOVES (🪙 100)
+          </button>
+          <button id="btn-defeat-retry" class="btn-secondary">RETRY LEVEL</button>
+          <button id="btn-defeat-map" class="btn-secondary" style="background: rgba(255,255,255,0.15);">GARDEN MAP</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pause Modal -->
+    <div id="modal-pause" class="modal">
+      <div class="modal-dialog">
+        <button class="modal-close-btn" aria-label="Close">✕</button>
+        <h2 class="modal-title">Game Paused</h2>
+        <div class="modal-actions" style="margin-top: 20px;">
+          <button id="btn-pause-resume" class="btn-primary-play">RESUME</button>
+          <button id="btn-pause-retry" class="btn-secondary">RETRY</button>
+          <button id="btn-pause-map" class="btn-secondary" style="background: rgba(255,255,255,0.15);">QUIT TO MAP</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Rewards Modal -->
+    <div id="modal-daily" class="modal">
+      <div class="modal-dialog">
+        <button class="modal-close-btn" aria-label="Close">✕</button>
+        <div class="modal-header-badge">DAILY GIFT</div>
+        <h2 class="modal-title">Daily Sweet Streak</h2>
+        <p style="font-size: 13px; color: #FFA2BE;">Visit every day to earn rare boosters and sweet coins!</p>
+
+        <div id="daily-rewards-container" class="daily-rewards-grid">
+          <!-- Dynamically populated -->
+        </div>
+
+        <button id="btn-claim-daily" class="btn-primary-play">CLAIM DAILY GIFT</button>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="modal-settings" class="modal">
+      <div class="modal-dialog">
+        <button class="modal-close-btn" aria-label="Close">✕</button>
+        <h2 class="modal-title">Settings</h2>
+
+        <div class="settings-group" style="margin: 18px 0 24px;">
+          <!-- Music Toggle -->
+          <div class="setting-row">
+            <span class="setting-label">Background Music</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-music-toggle" checked>
+              <span class="slider-round"></span>
+            </label>
+          </div>
+          <!-- Music Volume -->
+          <div class="setting-row">
+            <span class="setting-label">Music Volume</span>
+            <div class="slider-container">
+              <input type="range" id="setting-music-vol" min="0" max="100" value="65">
+            </div>
+          </div>
+          <!-- SFX Toggle -->
+          <div class="setting-row">
+            <span class="setting-label">Sound Effects</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-sfx-toggle" checked>
+              <span class="slider-round"></span>
+            </label>
+          </div>
+          <!-- SFX Volume -->
+          <div class="setting-row">
+            <span class="setting-label">SFX Volume</span>
+            <div class="slider-container">
+              <input type="range" id="setting-sfx-vol" min="0" max="100" value="85">
+            </div>
+          </div>
+          <!-- Haptic Vibration -->
+          <div class="setting-row">
+            <span class="setting-label">Vibration Haptics</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-vibrate-toggle" checked>
+              <span class="slider-round"></span>
+            </label>
+          </div>
+          <!-- Reduced Motion -->
+          <div class="setting-row">
+            <span class="setting-label">Reduced Motion</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-motion-toggle">
+              <span class="slider-round"></span>
+            </label>
+          </div>
+        </div>
+
+        <button id="btn-reset-progress" class="btn-secondary" style="background: rgba(255, 50, 50, 0.25); border: 1px solid #FF3B30; color: #FFA0A0;">
+          Reset All Progress
+        </button>
+      </div>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div id="modal-howtoplay" class="modal">
+      <div class="modal-dialog">
+        <button class="modal-close-btn" aria-label="Close">✕</button>
+        <h2 class="modal-title">How to Play</h2>
+        <div class="modal-body">
+          <p><strong>🍬 Match 3:</strong> Swap adjacent candies to match 3 identical candies in a row or column.</p>
+          <p style="margin-top: 8px;"><strong>⚡ Striped Candies:</strong> Match 4 candies in a row. When matched, it clears the entire row or column with a laser blast!</p>
+          <p style="margin-top: 8px;"><strong>🎁 Wrapped Candies:</strong> Match 5 in an L or T shape. Explodes in a 3x3 blast radius clearing all surrounding candies!</p>
+          <p style="margin-top: 8px;"><strong>🌟 Rainbow Stars:</strong> Match 5 in a straight line. Swap it with any candy to clear every piece of that color from the board!</p>
+          <p style="margin-top: 8px;"><strong>💥 Combos:</strong> Swap any two special pieces together for massive board-clearing reactions!</p>
+          <p style="margin-top: 8px;"><strong>🔨 Boosters:</strong> Use Lollipop Hammers, Shuffles, Rainbow Bombs, and +5 Moves to conquer challenging levels.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Modal -->
+    <div id="modal-about" class="modal">
+      <div class="modal-dialog">
+        <button class="modal-close-btn" aria-label="Close">✕</button>
+        <h2 class="modal-title">Luma Sweets</h2>
+        <div class="modal-body" style="text-align: center;">
+          <p><strong>Puzzle Garden Edition</strong></p>
+          <p>Version 1.0.0</p>
+          <p style="margin-top: 12px; font-size: 13px; color: #FFA2BE;">
+            A premier casual match-3 experience designed with original procedural audio synthesis, responsive touch controls, and 30 handcrafted levels.
+          </p>
+          <p style="margin-top: 14px; font-size: 12px; opacity: 0.8;">
+            © 2026 Luma Sweets Studio. All rights reserved. Original artwork & audio.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Privacy Policy Modal -->
+    <div id="modal-privacy" class="modal">
+      <div class="modal-dialog">
+        <button class="modal-close-btn" aria-label="Close">✕</button>
+        <h2 class="modal-title">Privacy Policy</h2>
+        <div class="modal-body" style="font-size: 13px; max-height: 280px; overflow-y: auto;">
+          <p><strong>Your Privacy Matters:</strong></p>
+          <p style="margin-top: 6px;">Luma Sweets: Puzzle Garden operates entirely offline and on-device. We do not collect, store, sell, or transmit any personal data, location data, or device identifiers.</p>
+          <p style="margin-top: 8px;"><strong>Local Storage:</strong></p>
+          <p style="margin-top: 6px;">Your level stars, high scores, coin balance, and audio preferences are stored exclusively on your device's browser local storage or private application sandbox.</p>
+          <p style="margin-top: 8px;"><strong>No Third-Party Trackers:</strong></p>
+          <p style="margin-top: 6px;">This game contains zero tracking pixels, analytics SDKs, or third-party advertising trackers.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- GAME ENGINES & SCRIPTS -->
+  <script src="js/config.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/levels.js"></script>
+  <script src="js/special-pieces.js"></script>
+  <script src="js/matching.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/boosters.js"></script>
+  <script src="js/rewards.js"></script>
+  <script src="js/level-map.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

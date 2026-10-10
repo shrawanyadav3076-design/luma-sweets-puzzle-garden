@@ -1,0 +1,6 @@
+{
+  "name": "Luma Sweets",
+  "description": "Luma Sweets: Puzzle Garden - A magical match-3 adventure with dazzling cascades, special candies, level progression, and boosters.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
